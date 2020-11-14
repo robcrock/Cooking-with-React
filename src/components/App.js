@@ -1,5 +1,7 @@
 import React from "react";
 import RecipeList from "./RecipeList";
+import "../css/app.css";
+import "../css/buttons.css";
 
 function App() {
   return (
@@ -20,15 +22,15 @@ const sampleRecipes = [
     ingredients: [
       {
         id: 1,
-        name: 'Chicken',
-        amount: '2 Pounds'
+        name: "Chicken",
+        amount: "2 Pounds",
       },
       {
         id: 2,
-        name: 'Salt',
-        amount: '1 Tbs'
-      }
-    ]
+        name: "Salt",
+        amount: "1 Tbs",
+      },
+    ],
   },
   {
     id: 2,
@@ -39,15 +41,15 @@ const sampleRecipes = [
     ingredients: [
       {
         id: 1,
-        name: 'Pork',
-        amount: '3 Pounds'
+        name: "Pork",
+        amount: "3 Pounds",
       },
       {
         id: 2,
-        name: 'Paprika',
-        amount: '2 Tbs'
-      }
-    ]
+        name: "Paprika",
+        amount: "2 Tbs",
+      },
+    ],
   },
 ];
 
