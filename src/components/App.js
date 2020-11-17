@@ -1,15 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
-import "../css/buttons.css";
+import uuidv4 from "uuid/v4";
 
 function App() {
-  return (
-    <>
-      <RecipeList recipes={sampleRecipes} />
-    </>
-  );
-}
+                 // Defaulting the state to sampleRecipes
+                 const [recipes, setRecipes] = useState(sampleRecipes);
+
+                 function handleRecipeAdd() {
+                   const newRecipe = {
+                     id: uuidv4(),
+                     name: "New",
+                     servings: 1,
+                     cookTime: "1:00",
+                     instructions: "Intr.",
+                     ingredients: [
+                       { id: uuidv4(), name: "Name", amount: "1 Tbs" },
+                     ],
+                   };
+
+                   setRecipes([...recipes, newRecipe]);
+                 }
+
+                 function handleRecipeDelete(id) {
+                   setRecipes(recipes.filter((recipe) => recipe.id !== id));
+                 }
+
+                 return (
+                   <>
+                     <RecipeList
+                       recipes={recipes}
+                       handleRecipeAdd={handleRecipeAdd}
+                       handleRecipeDelete={handleRecipeDelete}
+                     />
+                   </>
+                 );
+               }
 
 const sampleRecipes = [
   {
@@ -17,9 +43,7 @@ const sampleRecipes = [
     name: "Plain Chicken",
     servings: 3,
     cooktime: "1:45",
-    instructions: `1. Put salt on chicken
-2. Put chicken in oven
-3. Eat chicken`,
+    instructions: `1. Put salt on chicken\n2. Put chicken in oven\n3. Eat chicken`,
     ingredients: [
       {
         id: 1,
@@ -38,9 +62,7 @@ const sampleRecipes = [
     name: "Plain Pork",
     servings: 5,
     cooktime: "0:45",
-    instructions: `1. Put paprika on chicken 
-2. Put pork in oven 
-3. Eat pork`,
+    instructions: `1. Put paprika on chicken\n2. Put pork in oven\n3. Eat pork`,
     ingredients: [
       {
         id: 1,
