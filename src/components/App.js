@@ -1,44 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
 import uuidv4 from "uuid/v4";
 
 export const RecipeContext = React.createContext();
+const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
 
 function App() {
-                 // Defaulting the state to sampleRecipes
-                 const [recipes, setRecipes] = useState(sampleRecipes);
 
-                 const recipeContextValue = {
-                   handleRecipeAdd,
-                   handleRecipeDelete,
-                 };
+  // Defaulting the state to sampleRecipes
+  const [recipes, setRecipes] = useState(sampleRecipes);
 
-                 function handleRecipeAdd() {
-                   const newRecipe = {
-                     id: uuidv4(),
-                     name: "New",
-                     servings: 1,
-                     cookTime: "1:00",
-                     instructions: "Intr.",
-                     ingredients: [
-                       { id: uuidv4(), name: "Name", amount: "1 Tbs" },
-                     ],
-                   };
+  // Set the local storage once on load, but never again.
+  useEffect(() => {
+    const recipeJSON = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (recipeJSON != null) setRecipes(JSON.parse(recipeJSON))
+  }, [])
 
-                   setRecipes([...recipes, newRecipe]);
-                 }
+  // The order of these two effects matters becasue they're called in order
+  // We want to first get it from local storage and THEN set it.
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify(recipes)
+    );
+  }, [recipes]);
 
-                 function handleRecipeDelete(id) {
-                   setRecipes(recipes.filter((recipe) => recipe.id !== id));
-                 }
+  const recipeContextValue = {
+    handleRecipeAdd,
+    handleRecipeDelete,
+  };
 
-                 return (
-                   <RecipeContext.Provider value={recipeContextValue}>
-                     <RecipeList recipes={recipes} />
-                   </RecipeContext.Provider>
-                 );
-               }
+
+  function handleRecipeAdd() {
+    const newRecipe = {
+      id: uuidv4(),
+      name: "New",
+      servings: 1,
+      cookTime: "1:00",
+      instructions: "Intr.",
+      ingredients: [
+        { id: uuidv4(), name: "Name", amount: "1 Tbs" },
+      ],
+    };
+
+    setRecipes([...recipes, newRecipe]);
+  }
+
+  function handleRecipeDelete(id) {
+    setRecipes(recipes.filter((recipe) => recipe.id !== id));
+  }
+
+  return (
+    <RecipeContext.Provider value={recipeContextValue}>
+      <RecipeList recipes={recipes} />
+    </RecipeContext.Provider>
+  );
+}
 
 const sampleRecipes = [
   {
