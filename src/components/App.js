@@ -9,8 +9,12 @@ const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
 
 function App() {
 
+  const [selectedRecipeId, setSelectedRecipeId] = useState();
   // Defaulting the state to sampleRecipes
   const [recipes, setRecipes] = useState(sampleRecipes);
+  const selectedRecipe = recipes.find(
+    (recipe) => recipe.id === selectedRecipeId
+  );
 
   // Set the local storage once on load, but never again.
   useEffect(() => {
@@ -30,8 +34,12 @@ function App() {
   const recipeContextValue = {
     handleRecipeAdd,
     handleRecipeDelete,
+    handleRecipeSelect,
   };
 
+  function handleRecipeSelect(id) {
+    setSelectedRecipeId(id);
+  }
 
   function handleRecipeAdd() {
     const newRecipe = {
@@ -55,7 +63,7 @@ function App() {
   return (
     <RecipeContext.Provider value={recipeContextValue}>
       <RecipeList recipes={recipes} />
-      <RecipeEdit />
+      {selectedRecipe && <RecipeEdit recipe={selectedRecipe} />}
     </RecipeContext.Provider>
   );
 }
@@ -65,7 +73,7 @@ const sampleRecipes = [
     id: 1,
     name: "Plain Chicken",
     servings: 3,
-    cooktime: "1:45",
+    cookTime: "1:45",
     instructions: `1. Put salt on chicken\n2. Put chicken in oven\n3. Eat chicken`,
     ingredients: [
       {
@@ -84,7 +92,7 @@ const sampleRecipes = [
     id: 2,
     name: "Plain Pork",
     servings: 5,
-    cooktime: "0:45",
+    cookTime: "0:45",
     instructions: `1. Put paprika on chicken\n2. Put pork in oven\n3. Eat pork`,
     ingredients: [
       {
